@@ -1,20 +1,13 @@
 #!/usr/local/bin/python2.7
 # encoding: utf-8
 '''
-prune_files_and_folders -- shortdesc
-
-prune_files_and_folders is a description
-
-It defines classes_and_methods
+prune_files_and_folders -- A file & directory pruning system
+Prune files and folders that are older than an alloted time
 
 @author:     Glyn Mooney
-        
 @copyright:  2013 The Contributors. All rights reserved.
-        
 @license:    http://www.apache.org/licenses/LICENSE-2.0.html
-
 @contact:    glyn.mooney@gaia-tech.com
-
 @deffield    updated: Updated
 '''
 
@@ -42,6 +35,36 @@ class CLIError(Exception):
         return self.msg
     def __unicode__(self):
         return self.msg
+    
+
+def get_files(base_dir):
+    filelist = []
+    
+    for root, dirs, files in os.walk(base_dir, topdown=False):
+        for name in files:
+            filelist.append(os.path.join(root, name))
+    
+    return filelist
+
+def get_dirs(base_dir):
+    dirlist = []
+    
+    for root, dirs, files in os.walk(base_dir, topdown=False):
+        for name in dirs:
+            dirlist.append(os.path.join(root, name))
+    
+    return dirlist
+
+def delete_file(name):
+    try:
+        os.remove(name)
+        if not os.path.isfile(name):
+            return True
+        else:
+            return False
+    except OSError:
+        return False
+
 
 def main(argv=None): # IGNORE:C0111
     '''Command line options.'''
